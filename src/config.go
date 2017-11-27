@@ -17,6 +17,7 @@ func getAuthyID(config, username string) (int, error) {
 
 	reader := csv.NewReader(file)
 	reader.Comma = ' '
+	reader.TrimLeadingSpace = true
 
 	for {
 		record, err := reader.Read()
