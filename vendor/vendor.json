@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "3ylg6apqhUGVzDkXNFFD49dVNBQ=",
+			"path": "github.com/dcu/go-authy",
+			"revision": "87482e154bde3f95338a7ba0947222b4e98b836a",
+			"revisionTime": "2017-10-02T14:55:30Z"
+		}
+	],
+	"rootPath": "github.com/matevzmihalic/go-authy-openvpn"
+}
