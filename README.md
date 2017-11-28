@@ -7,23 +7,23 @@ which isn't updated anymore and is lacking Authy OneTouch support.
 
 ## Pre-Requisites
 
-    1. Authy API key
-    2. OpenVPN server installation
+1. Authy API key
+2. OpenVPN server installation
 
 
 ## Installation
 
 ### From compiled package
 
-    1. Download latest [release](releases) from GitHub
-    2. Extract tar archive in desired location on your server
-    3. Run `post-install` script
-    4. Restart OpenVPN
+1. Download latest [release](releases) from GitHub
+2. Extract tar archive in desired location on your server
+3. Run `post-install` script
+4. Restart OpenVPN
 
 ### From source
 
-    1. Install requirements: Golang, build essentials
-    2. Run `sudo make install`
+1. Install requirements: Golang, build essentials
+2. Run `sudo make install`
 
 
 ## Migrating from official plugin

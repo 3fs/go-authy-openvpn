@@ -25,3 +25,10 @@ install: all
 	cp scripts/authy-vpn-add-user $(DESTDIR)/usr/sbin/authy-vpn-add-user
 	chmod 700 $(DESTDIR)/usr/sbin/authy-vpn-add-user
 	./scripts/post-install
+
+package: all
+	rm -rf go-authy-openvpn
+	mkdir go-authy-openvpn
+	cp $(BUILD_DIR)/go-authy-openvpn $(BUILD_DIR)/auth_script.so scripts/post-install scripts/authy-vpn-add-user go-authy-openvpn
+	tar cvzf go-authy-openvpn.tar.gz go-authy-openvpn
+	rm -rf go-authy-openvpn
