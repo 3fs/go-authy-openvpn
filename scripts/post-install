@@ -35,6 +35,11 @@ function prephase {
         return 0
     fi
 
+    if [ ! -d $DESTDIR ] ; then
+      echo -n "Enter directory where go-authy-openvpn and auth_script.so are located: "
+      read DESTDIR
+    fi
+
     local serverconf="/etc/openvpn/server.conf"
     if [ ! -f $serverconf ] ; then
       echo -n "Enter path to your openvpn configuration: "
@@ -49,15 +54,18 @@ function prephase {
     echo -n "Authy API KEY: "
     read authy_key
 
-    add_authy $serverconf $SCRIPTSO $AUTHYBIN $authy_key
+    add_authy $serverconf $DESTDIR/auth_script.so $DESTDIR/go-authy-openvpn $authy_key
 
     echo ""
     echo "All done. Now start adding users using 'sudo authy-vpn-add-user'"
 }
 
 DESTDIR=/usr/lib/authy
-AUTHYBIN=$DESTDIR/go-authy-openvpn
-SCRIPTSO=$DESTDIR/auth_script.so
 
 check_root
 prephase
+
+if [ -f authy-vpn-add-user ] ; then
+    mkdir -p /usr/sbin/
+    cp authy-vpn-add-user /usr/sbin/
+fi
