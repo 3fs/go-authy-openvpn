@@ -55,6 +55,9 @@ func TestGetAuthyID(t *testing.T) {
 		if _, err := tmpfile.WriteString(test.config); err != nil {
 			t.Fatal("Error setting up test", err)
 		}
+		if err := tmpfile.Close(); err != nil {
+			t.Fatal("Error setting up test", err)
+		}
 
 		id, err := getAuthyID(tmpfile.Name(), test.inputUsername)
 		if err != nil && test.outputError == nil {
@@ -64,10 +67,6 @@ func TestGetAuthyID(t *testing.T) {
 		}
 		if id != test.outputID {
 			t.Fatalf("Expected Authy ID to be %d, but was %d", test.outputID, id)
-		}
-
-		if err := tmpfile.Close(); err != nil {
-			t.Fatal("Error setting up test", err)
 		}
 	}
 }
