@@ -15,7 +15,7 @@ which isn't updated anymore and is lacking Authy OneTouch support.
 
 ### From compiled package
 
-1. Download latest [release](releases) from GitHub
+1. Download latest [release](https://github.com/3fs/go-authy-openvpn/releases) from GitHub
 2. Extract tar archive in desired location on your server
 3. Run `post-install` script
 4. Restart OpenVPN
