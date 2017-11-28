@@ -24,3 +24,4 @@ install: all
 	mkdir -p $(DESTDIR)/usr/sbin
 	cp scripts/authy-vpn-add-user $(DESTDIR)/usr/sbin/authy-vpn-add-user
 	chmod 700 $(DESTDIR)/usr/sbin/authy-vpn-add-user
+	./scripts/post-install

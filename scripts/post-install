@@ -1,0 +1,63 @@
+#!/bin/bash
+# This script is based on
+# https://github.com/authy/authy-openvpn/blob/master/scripts/post-install
+
+function check_root {
+    if [[ "$(whoami)" != "root" ]]
+    then
+        echo "Please run this command as root."
+        exit -1
+    fi
+}
+
+function add_configuration {
+    local conf_file=$1
+    local string_to_add=$2
+    echo "" >> $conf_file
+    echo "# This line was added by the go-authy-openvpn installer" >> $conf_file
+    echo "$string_to_add" >> $conf_file
+}
+
+function add_authy {
+    local server_conf=$1
+    local plugin=$2
+    local gobin=$3
+    local key=$4
+
+    sed -ie '/go-authy-openvpn/d' "$server_conf"
+    add_configuration "$server_conf" "plugin $plugin $gobin $key"
+}
+
+function prephase {
+    echo -n "Do you want us to edit server.conf for you? (y/n): "
+    read helpp
+    if [ $helpp != 'y' ] ; then
+        return 0
+    fi
+
+    local serverconf="/etc/openvpn/server.conf"
+    if [ ! -f $serverconf ] ; then
+      echo -n "Enter path to your openvpn configuration: "
+      read serverconf
+    fi
+
+    if [ ! -f "$serverconf" ] ; then
+        echo "Config file not found. Make sure you enter the absolute path."
+        return 1
+    fi
+
+    echo -n "Authy API KEY: "
+    read authy_key
+
+    add_authy $serverconf $SCRIPTSO $AUTHYBIN $authy_key
+
+    echo ""
+    echo "All done. Now start adding users using 'sudo authy-vpn-add-user'"
+}
+
+DESTDIR=/usr/lib/authy
+AUTHYBIN=$DESTDIR/go-authy-openvpn
+SCRIPTSO=$DESTDIR/auth_script.so
+
+check_root
+prephase
