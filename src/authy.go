@@ -27,14 +27,14 @@ type authyVPNData struct {
 	authyAPI    authyAPI
 }
 
-func (d *authyVPNData) writeStatus(success *bool) {
+func (d *authyVPNData) writeStatus(success bool) {
 	file, err := os.OpenFile(d.controlFile, os.O_RDWR, 0755)
 	if err != nil {
 		logError(err)
 	}
 	defer file.Close()
 
-	if *success {
+	if success {
 		log.Printf("Authorization was successful for user %s\n", d.username)
 		file.WriteString("1")
 	} else {

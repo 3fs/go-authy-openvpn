@@ -24,8 +24,7 @@ func main() {
 	log.SetPrefix("[Authy] ")
 
 	if len(os.Args) == 1 {
-		status := logError(errors.New("First argument (API key) is required"))
-		data.writeStatus(&status)
+		data.writeStatus(logError(errors.New("First argument (API key) is required")))
 		return
 	}
 	data.authyAPI = authy.NewAuthyAPI(os.Args[1])
@@ -37,8 +36,5 @@ func main() {
 		data.config = os.Args[2]
 	}
 
-	status := false
-	defer data.writeStatus(&status)
-
-	status = data.authenticate()
+	data.writeStatus(data.authenticate())
 }

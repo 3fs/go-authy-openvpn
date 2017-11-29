@@ -51,7 +51,7 @@ If the provided password is `onetouch` the user will receive OneTouch push notif
 
 ### Token
 
-Password can be TOTP token from Authy app or token they received through SMS or call.
+Password can be TOTP token from Authy app or token the user received through SMS or call.
 
 ### SMS or call
 
