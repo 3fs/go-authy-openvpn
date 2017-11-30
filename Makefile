@@ -9,10 +9,15 @@ auth-script-openvpn:
 	mkdir auth-script-openvpn && wget -qO- $(AUTH_SCRIPT_SOURCE) | bsdtar -xvf- --strip-components 1 -C auth-script-openvpn
 
 $(BUILD_DIR)/auth_script.so: auth-script-openvpn
-	make -C auth-script-openvpn && mv auth-script-openvpn/auth_script.so $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
+	make -C auth-script-openvpn
+	mv auth-script-openvpn/auth_script.so $(BUILD_DIR)
 
 $(BUILD_DIR)/go-authy-openvpn:
 	go build -o $(BUILD_DIR)/go-authy-openvpn ./src
+
+test:
+	go test ./src
 
 clean:
 	rm -rf $(BUILD_DIR)

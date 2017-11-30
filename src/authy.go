@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/url"
 	"os"
@@ -23,6 +24,7 @@ type authyVPNData struct {
 	config      string
 	username    string
 	password    string
+	commonName  string
 	controlFile string
 	authyAPI    authyAPI
 }
@@ -44,9 +46,13 @@ func (d *authyVPNData) writeStatus(success bool) {
 }
 
 func (d *authyVPNData) authenticate() bool {
-	id, err := getAuthyID(d.config, d.username)
+	id, cn, err := getAuthyID(d.config, d.username)
 	if err != nil {
 		return logError(err)
+	}
+
+	if cn != "" && d.commonName != cn {
+		return logError(fmt.Errorf("CommonName %s does not match the configuration file common name %s", d.commonName, cn))
 	}
 
 	authyID := strconv.Itoa(id)

@@ -8,10 +8,10 @@ import (
 	"strconv"
 )
 
-func getAuthyID(config, username string) (int, error) {
+func getAuthyID(config, username string) (int, string, error) {
 	file, err := os.Open(config)
 	if err != nil {
-		return 0, err
+		return 0, "", err
 	}
 	defer file.Close()
 
@@ -26,16 +26,22 @@ func getAuthyID(config, username string) (int, error) {
 		}
 
 		if err != nil {
-			return 0, err
+			return 0, "", err
 		}
 
 		if record[0] == username {
-			if id, err := strconv.Atoi(record[1]); err == nil {
-				return id, nil
+			id, err := strconv.Atoi(record[1])
+			if err != nil {
+				return 0, "", fmt.Errorf("Authy ID %s for user %s is not valid. Authy ID's can only be numeric values.", record[1], username)
 			}
-			return 0, fmt.Errorf("Authy ID %s for user %s is not valid. Authy ID's can only be numeric values.", record[1], username)
+
+			if len(record) == 2 {
+				return id, "", nil
+			}
+
+			return id, record[2], nil
 		}
 	}
 
-	return 0, fmt.Errorf("User %s not found.", username)
+	return 0, "", fmt.Errorf("User %s not found.", username)
 }

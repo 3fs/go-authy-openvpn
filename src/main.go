@@ -17,6 +17,7 @@ func main() {
 	data := authyVPNData{
 		username:    os.Getenv("username"),
 		password:    os.Getenv("password"),
+		commonName:  os.Getenv("common_name"),
 		controlFile: os.Getenv("auth_control_file"),
 	}
 
