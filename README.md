@@ -29,7 +29,7 @@ If you allowed `post-instal` script from previous step to edit your `server.conf
 you should now have something like this at the end of it:
 
 ```
-plugin <go-authy-path>/auth_script.so <go-authy-path>/go-auty-openvpn -a <authy_api_key>
+plugin <go-authy-path>/auth_script.so <go-authy-path>/go-authy-openvpn -a <authy_api_key>
 ```
 
 If you don't have something like tihs in your configuration, you should add it manually.
@@ -38,7 +38,7 @@ If you want to have authy configuration file in non-defautl location (`/etc/open
 you can add `-c /path/to/authy-vpn.conf` after your api key:
 
 ```
-plugin <go-authy-path>/auth_script.so <go-authy-path>/go-auty-openvpn -a <authy_api_key> -c /path/to/authy-vpn.conf
+plugin <go-authy-path>/auth_script.so <go-authy-path>/go-authy-openvpn -a <authy_api_key> -c /path/to/authy-vpn.conf
 ```
 
 ## Migrating from official plugin
