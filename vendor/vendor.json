@@ -7,6 +7,30 @@
 			"path": "github.com/dcu/go-authy",
 			"revision": "87482e154bde3f95338a7ba0947222b4e98b836a",
 			"revisionTime": "2017-10-02T14:55:30Z"
+		},
+		{
+			"checksumSHA1": "GSadhwjiMi8zISYoyC1arYREbKE=",
+			"path": "github.com/oschwald/geoip2-golang",
+			"revision": "7118115686e16b77967cdbf55d1b944fe14ad312",
+			"revisionTime": "2018-02-22T21:45:52Z"
+		},
+		{
+			"checksumSHA1": "a1WxG0wMDGFnjojQghwu1i1SDhk=",
+			"path": "github.com/oschwald/maxminddb-golang",
+			"revision": "c5bec84d1963260297932a1b7a1753c8420717a7",
+			"revisionTime": "2018-02-25T17:45:17Z"
+		},
+		{
+			"checksumSHA1": "QF8rwiIXFjLAhew9YumEpMuLJ/c=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "7dca6fe1f43775aa6d1334576870ff63f978f539",
+			"revisionTime": "2018-03-08T12:25:47Z"
+		},
+		{
+			"checksumSHA1": "eQq+ZoTWPjyizS9XalhZwfGjQao=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "7dca6fe1f43775aa6d1334576870ff63f978f539",
+			"revisionTime": "2018-03-08T12:25:47Z"
 		}
 	],
 	"rootPath": "github.com/matevzmihalic/go-authy-openvpn"

@@ -13,7 +13,7 @@ $(BUILD_DIR)/auth_script.so: auth-script-openvpn
 	make -C auth-script-openvpn
 	mv auth-script-openvpn/auth_script.so $(BUILD_DIR)
 
-$(BUILD_DIR)/go-authy-openvpn:
+$(BUILD_DIR)/go-authy-openvpn: src/*.go
 	go build -ldflags="-s -w" -o $(BUILD_DIR)/go-authy-openvpn ./src
 
 test:

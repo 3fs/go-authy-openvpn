@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/url"
-	"os"
 	"strconv"
 	"time"
 
@@ -23,6 +22,7 @@ type authyVPNData struct {
 	username   string
 	password   string
 	commonName string
+	location   string
 	authyAPI   authyAPI
 }
 
@@ -45,8 +45,8 @@ func (d *authyVPNData) authenticate() bool {
 		log.Printf("Starting OneTouch authorization for user %s with Authy ID %s", d.username, authyID)
 
 		details := authy.Details{
-			"User":       d.username,
-			"IP Address": os.Getenv("untrusted_ip"),
+			"User":     d.username,
+			"Location": d.location,
 		}
 
 		approvalRequest, err := d.authyAPI.SendApprovalRequest(authyID, "OpenVPN login", details, url.Values{"seconds_to_expire": {"60"}})

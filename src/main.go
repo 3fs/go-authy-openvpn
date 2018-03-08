@@ -2,10 +2,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"net"
 	"os"
 
 	"github.com/dcu/go-authy"
+	geoip2 "github.com/oschwald/geoip2-golang"
 )
 
 func main() {
@@ -14,12 +17,14 @@ func main() {
 
 	apiKey := flag.String("a", "", "Authy API key")
 	config := flag.String("c", "/etc/openvpn/authy/authy-vpn.conf", "Authy config file")
+	geoipDBpath := flag.String("g", "", "MaxMind GeoLite2 DB path")
 	flag.Parse()
 
 	data := authyVPNData{
 		username:   os.Getenv("username"),
 		password:   os.Getenv("password"),
 		commonName: os.Getenv("common_name"),
+		location:   os.Getenv("untrusted_ip"),
 		config:     *config,
 	}
 	controlFile := os.Getenv("auth_control_file")
@@ -30,10 +35,38 @@ func main() {
 		return
 	}
 
+	if *geoipDBpath != "" {
+		location, _ := getLocation(*geoipDBpath, data.location)
+		if location != "" {
+			data.location = fmt.Sprintf("%s (%s)", location, data.location)
+		}
+	}
+
 	data.authyAPI = authy.NewAuthyAPI(*apiKey)
 	success := data.authenticate()
 
 	writeStatus(success, data.username, controlFile)
+}
+
+func getLocation(geoDB, ip string) (string, error) {
+	db, err := geoip2.Open(geoDB)
+	if err != nil {
+		log.Printf("Error opening GeoIP database: %s\n", err.Error())
+		return "", err
+	}
+	defer db.Close()
+
+	record, err := db.City(net.ParseIP(ip))
+	if err != nil {
+		log.Printf("Error geting city from IP: %s\n", err.Error())
+		return "", nil
+	}
+
+	if record.City.Names["en"] == "" {
+		return record.Country.Names["en"], nil
+	}
+
+	return fmt.Sprintf("%s, %s", record.City.Names["en"], record.Country.Names["en"]), nil
 }
 
 func writeStatus(success bool, username, controlFile string) {
