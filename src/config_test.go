@@ -27,14 +27,14 @@ func TestGetAuthyID(t *testing.T) {
 			"user3",
 			0,
 			"",
-			errors.New("User user3 not found."),
+			errors.New("user user3 not found"),
 		},
 		{
 			"user1 1\nuser2 abc",
 			"user2",
 			0,
 			"",
-			errors.New("Authy ID abc for user user2 is not valid. Authy ID's can only be numeric values."),
+			errors.New("authy ID abc for user user2 is not valid, authy ID's can only be numeric values"),
 		},
 		{
 			"user1   1\nuser2  \t2",
@@ -62,14 +62,14 @@ func TestGetAuthyID(t *testing.T) {
 			"user2",
 			0,
 			"",
-			errors.New("line 2, column 0: wrong number of fields in line"),
+			errors.New("record on line 2: wrong number of fields"),
 		},
 		{
 			"user1 1\nuser2 2 cn2",
 			"user2",
 			0,
 			"",
-			errors.New("line 2, column 0: wrong number of fields in line"),
+			errors.New("record on line 2: wrong number of fields"),
 		},
 	}
 

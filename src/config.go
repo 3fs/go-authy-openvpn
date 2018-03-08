@@ -32,7 +32,7 @@ func getAuthyID(config, username string) (int, string, error) {
 		if record[0] == username {
 			id, err := strconv.Atoi(record[1])
 			if err != nil {
-				return 0, "", fmt.Errorf("Authy ID %s for user %s is not valid. Authy ID's can only be numeric values.", record[1], username)
+				return 0, "", fmt.Errorf("authy ID %s for user %s is not valid, authy ID's can only be numeric values", record[1], username)
 			}
 
 			if len(record) == 2 {
@@ -43,5 +43,5 @@ func getAuthyID(config, username string) (int, string, error) {
 		}
 	}
 
-	return 0, "", fmt.Errorf("User %s not found.", username)
+	return 0, "", fmt.Errorf("user %s not found", username)
 }
