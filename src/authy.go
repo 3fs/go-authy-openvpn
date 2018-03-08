@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"log"
 	"net/url"
 	"os"
@@ -21,38 +19,23 @@ type authyAPI interface {
 }
 
 type authyVPNData struct {
-	config      string
-	username    string
-	password    string
-	commonName  string
-	controlFile string
-	authyAPI    authyAPI
-}
-
-func (d *authyVPNData) writeStatus(success bool) {
-	file, err := os.OpenFile(d.controlFile, os.O_RDWR, 0755)
-	if err != nil {
-		logError(err)
-	}
-	defer file.Close()
-
-	if success {
-		log.Printf("Authorization was successful for user %s\n", d.username)
-		file.WriteString("1")
-	} else {
-		log.Printf("Authorization wasn't successful for user %s\n", d.username)
-		file.WriteString("0")
-	}
+	config     string
+	username   string
+	password   string
+	commonName string
+	authyAPI   authyAPI
 }
 
 func (d *authyVPNData) authenticate() bool {
 	id, cn, err := getAuthyID(d.config, d.username)
 	if err != nil {
-		return logError(err)
+		log.Printf("Error getting authy ID from config: %s", err.Error())
+		return false
 	}
 
 	if cn != "" && d.commonName != cn {
-		return logError(fmt.Errorf("CommonName %s does not match the configuration file common name %s", d.commonName, cn))
+		log.Printf("Error: client common name %s does not match the configuration file common name %s", d.commonName, cn)
+		return false
 	}
 
 	authyID := strconv.Itoa(id)
@@ -65,14 +48,17 @@ func (d *authyVPNData) authenticate() bool {
 			"User":       d.username,
 			"IP Address": os.Getenv("untrusted_ip"),
 		}
+
 		approvalRequest, err := d.authyAPI.SendApprovalRequest(authyID, "OpenVPN login", details, url.Values{"seconds_to_expire": {"60"}})
 		if err != nil {
-			return logError(err)
+			log.Printf("Error in authy.SendApprovalRequest: %s", err.Error())
+			return false
 		}
 
 		status, err := d.authyAPI.WaitForApprovalRequest(approvalRequest.UUID, 60*time.Second, url.Values{})
 		if err != nil {
-			return logError(err)
+			log.Printf("Error in authy.WaitForApprovalRequest: %s", err.Error())
+			return false
 		}
 
 		if status == authy.OneTouchStatusApproved {
@@ -83,24 +69,28 @@ func (d *authyVPNData) authenticate() bool {
 		log.Printf("Sending SMS for user %s with Authy ID %s", d.username, authyID)
 
 		sms, err := d.authyAPI.RequestSMS(authyID, url.Values{})
-
 		if err != nil {
-			return logError(err)
+			log.Printf("Error in authy.RequestSMS: %s", err.Error())
+			return false
 		}
+
 		if !sms.Valid() {
-			return logError(errors.New("Request for SMS failed"))
+			log.Printf("Error: request for SMS was invalid")
+			return false
 		}
 
 	case "call":
 		log.Printf("Calling user %s with Authy ID %s", d.username, authyID)
 
 		call, err := d.authyAPI.RequestPhoneCall(authyID, url.Values{})
-
 		if err != nil {
-			return logError(err)
+			log.Printf("Error in authy.RequestPhoneCall: %s", err.Error())
+			return false
 		}
+
 		if !call.Valid() {
-			return logError(errors.New("Request for call failed"))
+			log.Printf("Error: request for call was invalid")
+			return false
 		}
 
 	default:
@@ -108,7 +98,8 @@ func (d *authyVPNData) authenticate() bool {
 
 		verification, err := d.authyAPI.VerifyToken(authyID, d.password, url.Values{})
 		if err != nil {
-			return logError(err)
+			log.Printf("Error in authy.VerifyToken: %s", err.Error())
+			return false
 		}
 		return verification.Valid()
 	}

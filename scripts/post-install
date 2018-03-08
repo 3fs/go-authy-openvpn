@@ -25,7 +25,7 @@ function add_authy {
     local key=$4
 
     sed -ie '/go-authy-openvpn/d' "$server_conf"
-    add_configuration "$server_conf" "plugin $plugin $gobin $key"
+    add_configuration "$server_conf" "plugin $plugin $gobin -a $key"
 }
 
 function prephase {
