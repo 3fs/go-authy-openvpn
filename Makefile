@@ -34,7 +34,7 @@ install: all
 package: all
 	rm -rf go-authy-openvpn
 	mkdir go-authy-openvpn
-	upx --brute $(BUILD_DIR)/go-authy-openvpn
+	upx --brute $(BUILD_DIR)/go-authy-openvpn || true
 	cp $(BUILD_DIR)/go-authy-openvpn $(BUILD_DIR)/auth_script.so scripts/post-install scripts/authy-vpn-add-user go-authy-openvpn
 	tar cvzf go-authy-openvpn.tar.gz go-authy-openvpn
 	rm -rf go-authy-openvpn
