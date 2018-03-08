@@ -1,4 +1,4 @@
-AUTH_SCRIPT_SOURCE=https://github.com/matevzmihalic/auth-script-openvpn/archive/params.zip
+AUTH_SCRIPT_SOURCE=https://github.com/matevzmihalic/auth-script-openvpn/archive/master.zip
 
 INSTDIR=/usr/lib/authy
 BUILD_DIR= build
@@ -14,7 +14,7 @@ $(BUILD_DIR)/auth_script.so: auth-script-openvpn
 	mv auth-script-openvpn/auth_script.so $(BUILD_DIR)
 
 $(BUILD_DIR)/go-authy-openvpn:
-	go build -o $(BUILD_DIR)/go-authy-openvpn ./src
+	go build -ldflags="-s -w" -o $(BUILD_DIR)/go-authy-openvpn ./src
 
 test:
 	go test ./src
@@ -34,6 +34,7 @@ install: all
 package: all
 	rm -rf go-authy-openvpn
 	mkdir go-authy-openvpn
+	upx --brute $(BUILD_DIR)/go-authy-openvpn
 	cp $(BUILD_DIR)/go-authy-openvpn $(BUILD_DIR)/auth_script.so scripts/post-install scripts/authy-vpn-add-user go-authy-openvpn
 	tar cvzf go-authy-openvpn.tar.gz go-authy-openvpn
 	rm -rf go-authy-openvpn
