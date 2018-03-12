@@ -34,12 +34,13 @@ plugin <go-authy-path>/auth_script.so <go-authy-path>/go-authy-openvpn -a <authy
 
 If you don't have something like tihs in your configuration, you should add it manually.
 
-If you want to have authy configuration file in non-defautl location (`/etc/openvpn/authy/authy-vpn.conf`)
-you can add `-c /path/to/authy-vpn.conf` after your api key:
+#### Configuration flags
 
-```
-plugin <go-authy-path>/auth_script.so <go-authy-path>/go-authy-openvpn -a <authy_api_key> -c /path/to/authy-vpn.conf
-```
+In your OpenVPN you can add flags after `go-authy-openvpn` to configure it. This are curretly supported flags:
+
+* `-a` (**required**) Authy API key
+* `-c` (_optional_) Authy config file (default is `/etc/openvpn/authy/authy-vpn.conf`)
+* `-g` (_optional_) [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) city or country database path, if you want to have location displayed in OneTouch request
 
 ## Migrating from official plugin
 
